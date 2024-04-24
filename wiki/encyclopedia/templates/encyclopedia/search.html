@@ -1,0 +1,25 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{ query }} search results
+{% endblock %}
+
+{% block body %}
+    {% if entries_found %}
+        <div class="error">
+            Results for <b>{{ query }}</b> not found.
+        </div>
+        <h3>Did you mean?</h3>
+        {% for entry in entries_found %}
+            <li><a href="{% url 'entry' entry=entry %}">{{ entry }}</a></li>
+        {% endfor %}
+    {% else %}
+        <div class="error">
+            Results for <b>{{ query }}</b> not found.
+        </div>
+        <h3>Here's an full list of the available entries:</h3>
+        {% for entry in entries %}
+            <li><a href="{% url 'entry' entry=entry %}">{{ entry }}</a></li>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

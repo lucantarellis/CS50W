@@ -1,0 +1,21 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{ entry }}
+{% endblock %}
+
+{% block body %}
+    {% if entry_page %}
+        <div>
+            <a href="{% url 'edit' entry=entry %}">Edit page</a>
+        </div>
+        <div>
+            {{ entry_page | safe }}
+        </div>
+    {% else %}
+        <h1>Entry not found</h1>
+        <div class="error">
+            The entry <b>({{ url }})</b> does not exist.
+        </div>
+    {% endif %}
+{% endblock %}
