@@ -1,0 +1,31 @@
+{% extends "network/layout.html" %}
+    {% if page_posts %}
+        {% for post in page_posts %}
+            <div class="card">
+                <a class="user-link" href="{% url 'profile' user_id=post.user.id %}">{{ post.user|upper }}</a>
+                <p>{{ post.content|upper }}</p>
+                <p>{{ post.date|upper }}</p>
+                <p>Likes: {{ post.like_count|upper }}</p>
+            </div>
+        {% endfor %}
+        
+        <nav class="page-nav">
+            <ul class="pagination">
+                {% if page_posts.has_previous %}
+                    <li class="page-item">
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_posts.previous_page_number }}">previous</a>
+                    </li>
+                {% endif %}
+                <li class="page-item">Page {{ page_posts.number }} of {{  page_posts.paginator.num_pages }}</li>
+                {% if page_posts.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ page_posts.next_page_number }}">next</a>
+                        <a href="?page={{ page_posts.paginator.num_pages }}">last &raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% block body %}
+{% endblock %}

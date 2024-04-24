@@ -1,0 +1,30 @@
+*, *::after, *::before {
+    box-sizing: inherit;
+}
+
+.notif {
+    padding: 16px;
+    margin: 16px;
+    border: 1px solid darkblue;
+    background-color: rgba(0, 0, 139, 0.090);
+    font-size: 1rem;
+    font-family: sans-serif;
+}
+
+.success {
+    padding: 16px;
+    margin: 16px;
+    border: 1px solid green;
+    background-color: rgba(0, 160, 0, 0.090);
+    font-size: 1rem;
+    font-family: sans-serif;
+}
+
+.error {
+    padding: 16px;
+    margin: 16px;
+    border: 1px solid red;
+    background-color: rgba(255, 0, 0, 0.123);
+    font-size: 1rem;
+    font-family: sans-serif;
+}

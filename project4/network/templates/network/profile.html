@@ -1,0 +1,58 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+    {% if success %}
+        <div class="success">
+            {{ success }}
+        </div>
+    {% elif error %}
+        <div class="error">
+            {{ error }}
+        </div>
+    {% elif winner %}
+        <div class="success">
+            {{ winner }}
+        </div>
+    {% elif message %}
+        <div class="notif">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <div>
+        <div>
+            <p>Followers:</p>
+            <p>{{ profile.follower_count }}</p>
+        </div>
+        <div>
+            <p>Following:</p>
+            <p>{{ profile.following_count }}</p>
+        </div>
+        {% if user.is_authenticated and profile.id != request.user.id %}
+                {% if is_following == True %}
+                    <form method="post" action="{% url 'profile' user_id=profile.id %}">
+                        {% csrf_token %}
+                        <button type="submit" name="unfollow">Unfollow</button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{% url 'profile' user_id=profile.id %}">
+                        {% csrf_token %}
+                        <button type="submit" name="follow">Follow</button>
+                    </form>
+                {% endif %}
+        {% else %}
+                <a class="btn" href="{% url 'login' %}">Log in</a>
+        {% endif %}
+    </div>
+    {% if posts %}
+        {% for post in posts %}
+            <div class="card">
+                <a class="user-link" href="{% url 'profile' user_id=post.user.id %}">{{ post.user }}</a>
+                <p>{{ post.content }}</p>
+                <p>{{ post.date }}</p>
+                <p>Likes: {{ post.like_count }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
