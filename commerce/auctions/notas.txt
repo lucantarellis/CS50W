@@ -1,0 +1,1 @@
+Quedan cosas por checkear en el ejercicio de las auctions, están con comentarios # CHECK

@@ -1,0 +1,35 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if cat_selected %}
+        <h1>Viewing "{{ cat_selected.first.category }}" listings </h1>
+    {% else %}
+        <h1>There are no listings for that category</h1>
+    {% endif %}
+    {% for auction in cat_selected %}
+        {% if auction.closed == False %}
+            <a class="card" href="{% url 'detail' auction.id %}">
+                <div class="item-card">
+                    <img src="{{ auction.url }}">
+                    <div class="item-desc">
+                        <div>
+                            <p class="title">{{ auction.product }}</p>
+                        </div>
+                        <div>
+                            <p>Created: {{ auction.date }}</p>
+                            <p>.</p>
+                            <p>Category: {{ auction.category }}</p>
+                        </div>
+                        <p>{{ auction.description }}</p>
+                        {% if auction.bids.first.bid_amount == None %}
+                            <p class="title">Price: $ {{ auction.starting_price }}</p>
+                        {% else %}
+                            <p class="title">Price: $ {{ auction.bids.first.bid_amount }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if success %}
+        <div class="success">
+            {{ success }}
+        </div>
+    {% elif error %}
+        <div class="error">
+            {{ error }}
+        </div>
+    {% elif winner %}
+        <div class="success">
+            {{ winner }}
+        </div>
+    {% elif message %}
+        <div class="notif">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <div style="padding:16px; display:flex; gap:24px; align-items: center;">
+        <h1>Listing: {{ auction.product }}</h1>
+        {% if user.is_authenticated %}
+
+            {% if added and auction.closed != True %}
+            <form method="post" action="{% url 'detail' auction.id %}">
+                {% csrf_token %}
+                <button type="submit" name="unwatch">Remove from watchlist</button>
+            </form>
+            {% elif not added and auction.closed != True %}
+            <form method="post" action="{% url 'detail' auction.id %}">
+                {% csrf_token %}
+                <button type="submit" name="watchlist">Add to watchlist</button>
+            </form>
+            {% endif %}
+
+            {% if user == auction.owner and auction.closed != True %}
+            <form method="post" action="{% url 'detail' auction.id %}">
+                {% csrf_token %}
+                <button type="submit" name="close_listing">Close listing</button>
+            </form>
+            {% endif %}
+
+        {% endif %}
+    </div>
+
+    <div class="prod-detail">
+        <img src="{{ auction.url }}"><br>
+        <div>
+            <h3>Listing description:</h3>
+            <p>{{ auction.description }}</p><br>
+        
+            <h3>Details</h3>
+            <ul>
+                <li>Listed by: {{ auction.owner }}</li>
+                <li>Listing date: {{ auction.date }}</li>
+                <li>Category: {{ auction.category }}</li>
+            </ul>
+            {% if bid == None and auction.closed != True %}
+                <p>Starting price:</p>
+                <h3>$ {{ auction.starting_price }}</h3>
+                {% if user.is_authenticated %}
+                    <div class="notif">No bids yet. Be the first one to bid this listing!</div>
+                {% else %}
+                    <div class="notif"><a style="color:black; text-decoration: underline;" href="{% url 'login'%}">Log in</a> or <a style="color:black; text-decoration: underline;" href="{% url 'register' %}">Register</a> to place a bid or comment.</div>
+                {% endif %}
+            {% elif bid == None and auction.closed == True %}
+                <p>Listing closed in:</p>
+                <h3>$ {{ auction.starting_price }}</h3>
+            {% elif bid != None and auction.closed == True %}
+                <p>Winner bid:</p>
+                <h3>$ {{ bid.bid_amount }}</h3>
+            {% else %}
+                <p>Winning bid:</p>
+                <h3>$ {{ bid.bid_amount }}</h3><br>
+                <p>{{ bid.count }} bids so far.</p>
+                {% if not user.is_authenticated %}
+                    <div class="notif"><a style="color:black; text-decoration: underline;" href="{% url 'login'%}">Log in</a> or <a style="color:black; text-decoration: underline;" href="{% url 'register' %}">Register</a> to place a bid or comment.</div>
+                {% endif %}
+            {% endif %}
+            {% if user.is_authenticated and auction.closed != True %}
+            <form method="post" action="{% url 'detail' auction.id %}">
+                {% csrf_token %}
+                {{ bid_form.bid.label_tag }}<br>
+                {{ bid_form.bid }}
+                <button type="submit" name="place_bid">Submit bid</button> 
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+    {% if user.is_authenticated and auction.closed != True %}
+    <form style="padding-left: 24px;" method="post" action="{% url 'detail' auction.id %}">
+        {% csrf_token %}
+        {{ comment_form.comment.label_tag }}<br>
+        {{ comment_form.comment }}<br>
+        <button type="submit" name="add_comment">Sumbit comment</button>
+    </form>
+    {% endif %}
+    <div style="margin:24px; background-color: grey;width: auto;height:1px;"></div>
+    {% if comments %}
+        <div style="padding: 8px 24px;">
+            {% for comment in comments %}
+                <div style="padding: 16px; margin-bottom: 16px; border: solid 1px grey;">
+                    <h4>{{ comment.user.username }}</h4>
+                    <p>{{ comment.date }}</p>
+                    <p>{{ comment.comment }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="padding-left: 24px;">
+            <h4>There are no comments for this listing.</h4>
+        </div>
+    {% endif %}
+
+{% endblock %}
