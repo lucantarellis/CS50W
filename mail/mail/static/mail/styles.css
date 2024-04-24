@@ -1,0 +1,45 @@
+textarea {
+    min-height: 400px;
+}
+
+li {
+    list-style-type: none;
+}
+
+#reply {
+    margin: 8px 0;
+}
+
+#archive {
+    margin-left: 8px;
+    margin-bottom: 8px;
+}
+
+#back {
+    margin-bottom: 8px;
+}
+
+.email-card {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.email-card:hover {
+    background-color: rgb(224, 224, 224);
+}
+
+.email-card-read {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    border: 1px solid black;
+    cursor: pointer;
+    background-color: lightgrey;
+}
+
+.email-card-read:hover {
+    background-color: rgb(224, 224, 224);
+}
